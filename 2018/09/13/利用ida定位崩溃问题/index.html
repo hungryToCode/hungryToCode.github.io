@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="iOS crash,ida的初步使用," />
 
 
 
@@ -79,16 +79,21 @@
 
 
 
-<meta name="description" content="Know,but say no strategically will help you grow up!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hungry Chen‘s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/hexo主题/index.html">
+<meta name="description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
+<meta name="keywords" content="iOS crash,ida的初步使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用ida定位崩溃问题">
+<meta property="og:url" content="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/index.html">
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
-<meta property="og:description" content="Know,but say no strategically will help you grow up!">
+<meta property="og:description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/利用ida定位崩溃问题/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/利用ida定位崩溃问题/2.jpg">
+<meta property="og:updated_time" content="2018-09-13T14:30:33.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hungry Chen‘s Blog">
-<meta name="twitter:description" content="Know,but say no strategically will help you grow up!">
+<meta name="twitter:title" content="利用ida定位崩溃问题">
+<meta name="twitter:description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/利用ida定位崩溃问题/1.jpg">
 
 
 
@@ -118,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/hexo主题/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/"/>
 
 
 
 
 
-  <title>标签: hexo主题 | Hungry Chen‘s Blog</title>
+  <title>利用ida定位崩溃问题 | Hungry Chen‘s Blog</title>
   
 
 
@@ -143,7 +148,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,82 +286,235 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>hexo主题<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hungry Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hungry Chen‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/09/10/the-description-of-themes-landscape/" itemprop="url">
-              
-                <span itemprop="name">the description of themes landscape</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">利用ida定位崩溃问题</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-10T23:14:27+08:00"
-              content="2018-09-10" >
-          09-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-13T21:02:45+08:00">
+                2018-09-13
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS-Debug/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS Debug</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生活，总是会给你带来意想不到的刺激与惊喜~</span><br></pre></td></tr></table></figure>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。<br>可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时候你就需要</p>
+<a id="more"></a>
+<ul>
+<li><p>定位步骤</p>
+<ol>
+<li><p>找个越狱机</p>
+</li>
+<li><p>从appstore上下载对应CP的包</p>
+</li>
+<li><p>对IPA包砸壳共后续IDA逆向的使用（后续会写一篇如何砸壳的文章）</p>
+</li>
+<li><p>查看CP提供的崩溃堆栈信息定位问题</p>
+</li>
+<li><p>天昏地暗</p>
+</li>
+</ol>
+</li>
+<li><p>堆栈信息截图<br><img src="利用ida定位崩溃问题/1.jpg" alt="avatar"><br><center>未符号化</center><br><br><br><img src="利用ida定位崩溃问题/2.jpg" alt="avatar"></p>
+</li>
+</ul>
+<center>已经符号化</center>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/09/themes-next-readme/" itemprop="url">
-              
-                <span itemprop="name">How to use themes next</span>
-              
-            </a>
-        
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-09T21:43:48+08:00"
-              content="2018-09-09" >
-          09-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>根据问题我们可以得出以下几点有用的信息</p>
+<ul>
+<li><p>通过符号化的第8个堆栈信息可以看出确实是因为我方的SDK而crash（因为该函数调用是我方提供给CP调用的接口）</p>
+</li>
+<li><p>SIGSEGV:</p>
+<ul>
+<li>SIGSEGV是当一个进程执行了一个无效的内存引用，或发生段错误时会发出的信号。</li>
+</ul>
+</li>
+<li><p>从上到下总共0到11个堆栈信息（部分截图)，其中对我们分析有用的是0到8，由0可以看出应用是崩在strnlen这个函数。</p>
+</li>
+</ul>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2>
       
     </div>
+    
+    
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Hungry Chen 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Hungry Chen 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-crash/" rel="tag"># iOS crash</a>
+          
+            <a href="/tags/ida的初步使用/" rel="tag"># ida的初步使用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/10/the-description-of-themes-landscape/" rel="next" title="the description of themes landscape">
+                <i class="fa fa-chevron-left"></i> the description of themes landscape
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -364,6 +522,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -384,8 +546,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -465,6 +636,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决"><span class="nav-number">3.</span> <span class="nav-text">问题解决</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -601,6 +788,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
