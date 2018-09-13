@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
+<meta name="description" content="生活，总是会给你带来意想不到的刺激与惊喜~  问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这">
 <meta name="keywords" content="iOS crash,ida的初步使用">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用ida定位崩溃问题">
 <meta property="og:url" content="http://yoursite.com/2018/09/13/利用ida定位崩溃问题/index.html">
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
-<meta property="og:description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
+<meta property="og:description" content="生活，总是会给你带来意想不到的刺激与惊喜~  问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/Users/chenjuncheng/Desktop/hungryToCodeBlog/source/利用ida定位崩溃问题/1.jpg">
 <meta property="og:image" content="http://yoursite.com/Users/chenjuncheng/Desktop/hungryToCodeBlog/source/利用ida定位崩溃问题/2.jpg">
-<meta property="og:updated_time" content="2018-09-13T14:37:47.502Z">
+<meta property="og:updated_time" content="2018-09-13T14:39:50.470Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用ida定位崩溃问题">
-<meta name="twitter:description" content="1生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时">
+<meta name="twitter:description" content="生活，总是会给你带来意想不到的刺激与惊喜~  问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这">
 <meta name="twitter:image" content="http://yoursite.com/Users/chenjuncheng/Desktop/hungryToCodeBlog/source/利用ida定位崩溃问题/1.jpg">
 
 
@@ -389,7 +389,9 @@
       
 
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">生活，总是会给你带来意想不到的刺激与惊喜~</span><br></pre></td></tr></table></figure>
+        <blockquote>
+<p>生活，总是会给你带来意想不到的刺激与惊喜~</p>
+</blockquote>
 <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。<br>可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你，所以这时候你就需要:</p>
 <a id="more"></a>
 <ul>
