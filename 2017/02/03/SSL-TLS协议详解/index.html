@@ -79,18 +79,32 @@
 
 
 
-<meta name="description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容。">
+<meta name="description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容">
 <meta name="keywords" content="protocol,ssl,wireshark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TLS&#x2F;SSL协议详解">
 <meta property="og:url" content="http://yoursite.com/2017/02/03/SSL-TLS协议详解/index.html">
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
-<meta property="og:description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容。">
+<meta property="og:description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-06T04:04:03.429Z">
+<meta property="og:image" content="http://yoursite.com/images/SSL/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/5.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/6.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/7.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/8.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/9.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/10.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/12.jpg">
+<meta property="og:image" content="http://yoursite.com/images/SSL/13.jpg">
+<meta property="og:updated_time" content="2018-11-06T11:34:29.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TLS&#x2F;SSL协议详解">
-<meta name="twitter:description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容。">
+<meta name="twitter:description" content="记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容">
+<meta name="twitter:image" content="http://yoursite.com/images/SSL/1.jpg">
 
 
 
@@ -386,11 +400,10 @@
       
 
       
-        <blockquote class="blockquote-center">记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容。</blockquote>
-
-<a id="more"></a>
+        <pre><code>记录TLS/SSL协议,包括握手协议(handshake protocol)、记录协议(record protocol)、警告协议(alert protocol)的相关内容
+</code></pre><a id="more"></a>
 <h2 id="TLS-SSL协议详解之握手协议"><a href="#TLS-SSL协议详解之握手协议" class="headerlink" title="TLS/SSL协议详解之握手协议"></a>TLS/SSL协议详解之握手协议</h2><h3 id="功能实现主要算法"><a href="#功能实现主要算法" class="headerlink" title="功能实现主要算法"></a>功能实现主要算法</h3><p>TLS/SSL的功能实现主要依赖于三类基本算法：<font color="#0099ff">散列函数 Hash</font>、<font color="#0099ff">对称加密</font>和<font color="#0099ff">非对称加密</font>，其利用非对称加密实现<font color="#0099ff">身份认证和密钥协商</font>，对称加密算法采用协商的<font color="#0099ff">密钥对数据加密</font>，基于散列函数<font color="#0099ff">验证信息的完整性</font>。</p>
-
+<p><img src="/images/SSL/1.jpg" alt="SSL/TLS加密算法" title="SSL/TLS加密算法"></p>
 <h3 id="身份验证CA和证书"><a href="#身份验证CA和证书" class="headerlink" title="身份验证CA和证书"></a>身份验证CA和证书</h3><p>为了能够验证服务器的身份信息，为此需要引入权威的第三方机构CA。CA 负责核实公钥的拥有者的信息，并颁发认证”证书”，同时能够为使用者提供证书验证服务，即PKI体系(PKI基础知识)</p>
 <h4 id="证书认证流程"><a href="#证书认证流程" class="headerlink" title="证书认证流程"></a>证书认证流程</h4><ul>
 <li><p>服务方S向第三方机构CA提交公钥、组织信息、个人信息(域名)等信息并申请认证;</p>
@@ -426,7 +439,7 @@
 <li><p>OCSP(<font color="#0099ff">Online Certificate Status Protocol</font>), 证书状态在线查询协议，一个实时查询证书是否吊销的方式。请求者发送证书的信息并请求查询，服务器返回正常、吊销或未知中的任何一个状态。证书中一般也会包含一个 OCSP 的 URL 地址，要求查询服务器具有良好的性能。部分 CA 或大部分的自签 CA (根证书)都是未提供 CRL 或 OCSP 地址的，对于吊销证书会是一件非常麻烦的事情。</p>
 </li>
 </ul>
-<h3 id="TLS-SSL握手过程"><a href="#TLS-SSL握手过程" class="headerlink" title="TLS/SSL握手过程"></a>TLS/SSL握手过程</h3>
+<h3 id="TLS-SSL握手过程"><a href="#TLS-SSL握手过程" class="headerlink" title="TLS/SSL握手过程"></a>TLS/SSL握手过程</h3><p><img src="/images/SSL/2.jpg" alt="SSL/TLS握手过程" title="SSL/TLS握手过程"></p>
 <h4 id="client-hello"><a href="#client-hello" class="headerlink" title="client_hello"></a>client_hello</h4><p>客户端发起请求，以<font color="#0099ff">明文</font>传输请求信息，包含版本信息，加密套件候选列表，压缩算法候选列表，随机数，扩展字段等信息，相关信息如下：</p>
 <ul>
 <li><p>支持的最高TSL协议版本version，从低到高依次<font color="#0099ff"> SSLv2 SSLv3 TLSv1 TLSv1.1 TLSv1.2</font>，当前基本不再使用低于<font color="#0099ff">TLSv1</font>的版本;</p>
@@ -440,7 +453,7 @@
 <li><p>扩展字段<font color="#0099ff">extensions</font>，支持协议与算法的相关参数以及其它辅助信息等，常见的<font color="#0099ff">SNI</font>就属于扩展字段，后续单独讨论该字段作用。</p>
 </li>
 </ul>
-
+<p><img src="/images/SSL/3.jpg" alt="SSL/TLS client_hello阶段" title="SSL/TLS client_hello阶段"></p>
 <p>每一条消息都会包含有<font color="#0099ff">ContentType</font>, <font color="#0099ff">Version</font>, <font color="#0099ff">HandshakeType</font>等信息。ContentType指示SSL通信处于哪个阶段，是握手(<font color="#0099ff">Handshake</font>)，开始加密传输(<font color="#0099ff">ChangeCipherSpec</font>)还是正常通信(<font color="#0099ff">Application</font>)等，见下表</p>
 <table>
 <thead>
@@ -560,15 +573,15 @@
 <h4 id="server-hello-server-certificate-sever-hello-done"><a href="#server-hello-server-certificate-sever-hello-done" class="headerlink" title="server_hello+server_certificate+sever_hello_done"></a>server_hello+server_certificate+sever_hello_done</h4><ul>
 <li><font color="#0099ff">server_hello</font>, 服务端返回协商的信息结果，包括选择使用的协议版本version，选择的加密套件<font color="#0099ff">cipher suite</font>，选择的压缩算法<font color="#0099ff">com pression method</font>、随机数<font color="#0099ff">random_S</font>等，其中随机数用于后续的密钥协商;<br>这里多了个<font color="#0099ff">session id</font>,如果SSL连接断开，再次连接时，可以使用该属性重新建立连接，在双方都有缓存的情况下可以省略握手的步骤。<br>server端也会生成随机的RN，用于生成<font color="#0099ff">session key</font>使用。<br>server会从client发送的<font color="#0099ff">Cipher suite</font>列表中跳出一个，这里挑选的是<font color="#0099ff">RSA</font> + <font color="#0099ff">RC4</font> + <font color="#0099ff">MD5</font>。<br>这次server共发送的3个handshake 消息:<font color="#0099ff">Serverhello</font>，<font color="#0099ff">Certificate</font>和<font color="#0099ff">ServerHelloDone</font>，共用一个<font color="#0099ff">ContentType:Handshake</font>。</li>
 </ul>
-
+<p><img src="/images/SSL/4.jpg" alt="SSL/TLS server_hello阶段" title="SSL/TLS server_hello阶段"></p>
 <ul>
 <li><font color="#0099ff">server_certificates</font>, 服务器端配置对应的证书链，用于身份验证与密钥交换;</li>
 </ul>
-
+<p><img src="/images/SSL/5.jpg" alt="SSL/TLS 证书认证阶段" title="SSL/TLS 证书认证阶段阶段"></p>
 <ul>
 <li><font color="#0099ff">server_hello_done</font>，通知客户端 server_hello 信息发送结束;</li>
 </ul>
-
+<p><img src="/images/SSL/6.jpg" alt="SSL/TLS server_hello_done阶段" title="SSL/TLS server_hello_done阶段"></p>
 <h4 id="证书校验"><a href="#证书校验" class="headerlink" title="证书校验"></a>证书校验</h4><p>客户端验证证书的合法性，如果验证通过才会进行后续通信，否则根据错误情况不同做出提示和操作，合法性验证包括如下：</p>
 <ul>
 <li><p>[<font color="#0099ff">证书链</font>]的可信性<font color="#0099ff">trusted certificate path</font>，方法如前文所述;</p>
@@ -583,7 +596,7 @@
 <h4 id="client-key-exchange-change-cipher-spec-encrypted-handshake-message"><a href="#client-key-exchange-change-cipher-spec-encrypted-handshake-message" class="headerlink" title="client_key_exchange+change_cipher_spec+encrypted_handshake_message"></a>client_key_exchange+change_cipher_spec+encrypted_handshake_message</h4><ul>
 <li><font color="#0099ff">client_key_exchange</font>，合法性验证通过之后，客户端计算产生随机48字节的数字 Pre-master，padding并用证书公钥加密，发送给服务器;</li>
 </ul>
-
+<p><img src="/images/SSL/7.jpg" alt="SSL/TLS client_key_exchange阶段" title="SSL/TLS client_key_exchange阶段"></p>
 <ul>
 <li>此时客户端已经获取全部的计算协商密钥需要的信息：两个明文随机数 random_C 和 random_S 与自己计算产生的 Pre-master，计算得到协商密钥:</li>
 </ul>
@@ -592,11 +605,11 @@
 <ul>
 <li><font color="#0099ff">change_cipher_spec</font>，客户端通知服务器后续的通信都采用协商的通信密钥和加密算法进行加密通信;</li>
 </ul>
-
+<p><img src="/images/SSL/8.jpg" alt="SSL/TLS change_cipher_spec阶段" title="SSL/TLS change_cipher_spec阶段"></p>
 <ul>
 <li><font color="#0099ff">encrypted_handshake_message</font>，结合之前所有通信参数的 hash 值与其它相关信息生成一段数据，采用协商密钥 session secret 与算法进行加密，然后发送给服务器用于数据与握手验证;</li>
 </ul>
-
+<p><img src="/images/SSL/9.jpg" alt="SSL/TLS encrypted_handshake_message阶段" title="SSL/TLS encrypted_handshake_message阶段"></p>
 <p>client发送的加密数据，这个消息非常关键，一是能证明<font color="#0099ff">握手数据没有被篡改过</font>，二也能证明<font color="#0099ff">自己确实是密钥的拥有者</font>(这里是单边验证，只有server有certificate，server发送的Finished能证明自己含有private key，原理是一样的)。client将之前发送的所有握手消息存入handshake messages缓存，进行MD5和SHA-1两种hash运算，再与前面的master secret和一串常量”client finished”进行PRF伪随机运算得到12字节的verify data，还要经过改进的MD5计算得到加密信息。为什么能证明上述两点呢，前面说了只有密钥的拥有者才能解密得到pre-master key，master key，最后得到key block后，进行hash运算得到的结果才与发送方的一致。</p>
 <h4 id="change-cipher-spec-encrypted-handshake-message"><a href="#change-cipher-spec-encrypted-handshake-message" class="headerlink" title="change_cipher_spec+encrypted_handshake_message"></a>change_cipher_spec+encrypted_handshake_message</h4><ul>
 <li>服务器用私钥解密加密的<font color="#0099ff">Pre-master</font>数据，基于之前交换的两个明文随机数<font color="#0099ff">random_C</font>和<font color="#0099ff">random_S</font>，计算得到协商密钥:</li>
@@ -609,11 +622,11 @@
 <li><p><font color="#0099ff">change_cipher_spec</font>, 验证通过之后，服务器同样发送<font color="#0099ff">change_cipher_spec</font>以告知客户端后续的通信都采用协商的密钥与算法进行加密通信;</p>
 </li>
 </ul>
-
+<p><img src="/images/SSL/10.jpg" alt="SSL/TLS change_cipher_spec阶段" title="SSL/TLS change_cipher_spec阶段"></p>
 <ul>
 <li><font color="#0099ff">encrypted_handshake_message</font>, 服务器也结合所有当前的通信参数信息生成一段数据并采用协商密钥<font color="#0099ff">session secret</font>与算法加密并发送到客户端;</li>
 </ul>
-
+<p><img src="/images/SSL/4.jpg" alt="SSL/TLS encrypted_handshake_message阶段" title="SSL/TLS encrypted_handshake_message阶段"></p>
 <p>与client发送Finished计算方法一致。server发送的Finished里包含hash给client，client会进行校验，如果通过，说明握手过程中的数据没有被第三方篡改过，也说明server是之前交换证书的拥有者 。</p>
 <h4 id="握手结束"><a href="#握手结束" class="headerlink" title="握手结束"></a>握手结束</h4><p>客户端计算所有接收信息的<font color="#0099ff">hash</font>值，并采用协商密钥解密<font color="#0099ff">encrypted_handshake_message</font>，验证服务器发送的数据和密钥，验证通过则握手完成;</p>
 <h4 id="加密通信"><a href="#加密通信" class="headerlink" title="加密通信"></a>加密通信</h4><p>开始使用协商密钥与算法进行加密通信。</p>
@@ -665,7 +678,7 @@
 <li><p><font color="#0099ff">完整性</font>：握手协议定义了MAC，用于保证消息完整性</p>
 </li>
 </ul>
-
+<p><img src="/images/SSL/12.jpg" alt="SSL/TLS 记录协议" title="SSL/TLS 记录协议"></p>
 <p>SSL记录协议最后的步骤便是准备一个记录头，这个记录头包含以下的字段。</p>
 <ul>
 <li><p>数据类型(<font color="#0099ff">Content type</font>)，8位：用来处理这个分片的上层协议。</p>
@@ -679,7 +692,7 @@
 </ul>
 <h2 id="TLS-SSL协议详解之警告协议"><a href="#TLS-SSL协议详解之警告协议" class="headerlink" title="TLS/SSL协议详解之警告协议"></a>TLS/SSL协议详解之警告协议</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>SSL警告协议亦称SSL告警协议、SSL报警协议，是用来为对等实体传递SSL的相关警告。如果在通信过程中某一方发现任何异常，就需要给对方发送一条警示消息通告。</p>
 <h3 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h3><p>SSL报警协议报文由严重级别和警告代码两部分组成，如图所示。</p>
-
+<p><img src="/images/SSL/13.jpg" alt="SSL/TLS 报警协议" title="SSL/TLS 报警协议"></p>
 <p>SSL报警协议中严重级别分为<font color="#0099ff">Fatal</font>和<font color="#0099ff">Waming</font>为两种。其中，<font color="#0099ff">Fatal</font>级报警即致命级报警，它要求通信双方都要采取紧急措施，并终止会话，如在数据传输过程中，若发现有错误的MAC，双方就需要立即中断会话，同时消除自己缓冲区相应的会话记录；而对<font color="#0099ff">Warning</font>级报警即警告级报警的处理，通常是通信双方都只进行日志记录，它对通信过程不造成影响。</p>
 <p>以下是一些警告信息：</p>
 <ul>
@@ -876,7 +889,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

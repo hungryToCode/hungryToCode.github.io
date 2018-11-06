@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
 <meta property="og:description" content="生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/1.jpg">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/2.jpg">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/3.jpg">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/4.jpg">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/5.jpg">
-<meta property="og:image" content="http://yoursite.com/images/18_09_13/6.jpg">
-<meta property="og:updated_time" content="2018-09-15T05:13:14.783Z">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/2.jpg">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/4.jpg">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/5.jpg">
+<meta property="og:image" content="http://yoursite.com/images/利用ida定位崩溃问题/6.jpg">
+<meta property="og:updated_time" content="2018-11-06T11:12:13.578Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用ida定位崩溃问题">
 <meta name="twitter:description" content="生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你。">
-<meta name="twitter:image" content="http://yoursite.com/images/18_09_13/1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/利用ida定位崩溃问题/1.jpg">
 
 
 
@@ -397,7 +397,7 @@
 </code></pre><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。<br>可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你。</p>
 <a id="more"></a>
 <ul>
-<li>堆栈信息截图<br><img src="/images/18_09_13/1.jpg" alt="未符号化" title="未符号化"><br><img src="/images/18_09_13/2.jpg" alt="已符号化" title="已符号化"></li>
+<li>堆栈信息截图<br><img src="/images/利用ida定位崩溃问题/1.jpg" alt="未符号化" title="未符号化"><br><img src="/images/利用ida定位崩溃问题/2.jpg" alt="已符号化" title="已符号化"></li>
 </ul>
 <h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>根据问题我们可以得出以下几点有用的信息</p>
 <ul>
@@ -430,7 +430,7 @@
 <li><p>找个越狱机，从appstore上下载对应的应用，并进行砸壳供后续使用。（后续会写一篇砸壳的大致步骤）</p>
 </li>
 <li><p>使用IDA逆向砸壳后的.decrypted包。</p>
-<p><img src="/images/18_09_13/3.jpg" alt="IDA截图" title="IDA截图"></p>
+<p><img src="/images/利用ida定位崩溃问题/3.jpg" alt="IDA截图" title="IDA截图"></p>
 </li>
 <li><p>查看未符号化图中的第三条：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DYZB	0x00000001021626d4 0x0000000100054000 + 34662100</span><br></pre></td></tr></table></figure>
@@ -439,7 +439,7 @@
 </li>
 <li><p>接着因为IDA软件本身有一个初始的偏移地址，查看方法为：</p>
 <pre><code>IDA——Edit——segments——rebase program——value
-</code></pre><p><img src="/images/18_09_13/4.jpg" alt="iDA默认偏移" title="默认偏移"></p>
+</code></pre><p><img src="/images/利用ida定位崩溃问题/4.jpg" alt="iDA默认偏移" title="默认偏移"></p>
 </li>
 <li><p>两个地址相加：</p>
 <pre><code>0x210E6D4 + 0x100000000 = 0x10210E6D4
@@ -447,7 +447,7 @@
 </ul>
 </li>
 <li><p>在IDA中按下地址跳转键“g”，输入上述地址跳转到<strong>0x10210E6D4</strong>，图为：</p>
-<p><img src="/images/18_09_13/5.jpg" alt="崩溃地址图" title="崩溃地址图"></p>
+<p><img src="/images/利用ida定位崩溃问题/5.jpg" alt="崩溃地址图" title="崩溃地址图"></p>
 <ul>
 <li><p>其中框1为崩溃地址，可以看出为调用了strncpy之后崩溃。</p>
 </li>
@@ -466,7 +466,7 @@ B.NE loc_1021E694
 </ul>
 </li>
 <li><p>综上，crash位置如图：</p>
-<p><img src="/images/18_09_13/6.jpg" alt="崩溃代码" title="崩溃代码"></p>
+<p><img src="/images/利用ida定位崩溃问题/6.jpg" alt="崩溃代码" title="崩溃代码"></p>
 </li>
 </ol>
 <h2 id="崩溃原因"><a href="#崩溃原因" class="headerlink" title="崩溃原因"></a>崩溃原因</h2>
@@ -645,7 +645,7 @@ B.NE loc_1021E694
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
