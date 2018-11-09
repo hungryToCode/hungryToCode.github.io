@@ -388,52 +388,162 @@
 
       
         
-          
-            <pre><code>本文主要分析当iOS APP crash的时候，如何符号化crash日志。
-</code></pre><h2 id="需要的工具"><a href="#需要的工具" class="headerlink" title="需要的工具:"></a>需要的工具:</h2><ul>
-<li><code>Xcode</code></li>
-<li><code>app</code>崩溃时生成的<code>.crash</code>文件,可通过<code>Xcode</code>–&gt; <code>Window</code>–&gt; <code>Devices and Simulators</code>–&gt; <code>View Device Logs</code>从iPhone中提取出来</li>
-<li><code>dsym</code>文件(符号表文件)</li>
-<li><code>symbolicatecrash</code>(可通过执行<code>find /Applications/Xcode.app/ -name symbolicatecrash</code>找到该文件的所在位置)</li>
-</ul>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式:"></a>使用方式:</h2><ol>
-<li>打开<code>.crash</code>文件找到其中的<code>uuid</code></li>
-<li>找到对应的<code>dysm</code>文件.(可通过<code>dwarfdump --uuid xxx.dsym</code>查看<code>uuid</code>是否和1的一致)</li>
-<li>将<code>.crash</code>,<code>dysm</code>,<code>symbolicatecrash</code>这3个文件放在同一个文件夹下方便处理</li>
-<li>执行命令<code>./symbolicatecrash xxxx.crash xxxx.dSYM/ &gt; output.crash</code>就可以看到符号化以后的崩溃堆栈信息</li>
-<li>若报错<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash</code>，则在终端执行一次后面的命令<code>export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;</code>，然后再执行一次<code>4</code>的命令.</li>
-</ol>
-<p>ps:最后生成的<code>.crash</code>文件只会解析当前项目的代码，其余的还是十六进制数据</p>
-<h2 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h2><ol>
-<li><p>从<code>iPhone</code>中获取<code>wspxDemo  2018-11-5, 2-42 PM.crash.crash</code>文件如下(只保留需要的关键信息)</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">Incident Identifier: 211AB31B-F097-47DC-83ED-3AC6B3AC6B05</span><br><span class="line">CrashReporter Key:   991d9b4c57cf7b9c00c2cabc05f20cb4812ea851</span><br><span class="line">Hardware Model:      iPhone10,3</span><br><span class="line">Process:             wspxDemo [1214]</span><br><span class="line">Path:                /private/var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</span><br><span class="line">Identifier:          com.crash.CrashMe</span><br><span class="line">Version:             2222 (22.22.222)</span><br><span class="line">Code Type:           ARM-64 (Native)</span><br><span class="line">Role:                Foreground</span><br><span class="line">Parent Process:      launchd [1]</span><br><span class="line">Coalition:           com.crash.CrashMe [738]</span><br><span class="line"></span><br><span class="line">Date/Time:           2018-11-05 14:42:17.6018 +0800</span><br><span class="line">Launch Time:         2018-11-05 14:42:17.3303 +0800</span><br><span class="line">OS Version:          iPhone OS 12.1 (16B5089b)</span><br><span class="line">Baseband Version:    3.11.00</span><br><span class="line">Report Version:      104</span><br><span class="line"></span><br><span class="line">Exception Type:  EXC_CRASH (SIGABRT)</span><br><span class="line">Exception Codes: 0x0000000000000000, 0x0000000000000000</span><br><span class="line">Exception Note:  EXC_CORPSE_NOTIFY</span><br><span class="line">Triggered by Thread:  0</span><br><span class="line"></span><br><span class="line">Application Specific Information:</span><br><span class="line">abort() called</span><br><span class="line"></span><br><span class="line">Last Exception Backtrace:</span><br><span class="line">(0x1dcfcfea0 0x1dc1a1a40 0x1dcede054 0x102ceb9b4 0x209fda3c8 0x209fdbb30 0x209fe157c 0x20987ea18 0x209887698 0x20987e694 0x20987f034 0x20987d134 0x20987cde0 0x209881fa0 0x209882f00 0x209881e58 0x209886d44 0x209fdfa74 0x209bca088 0x1dfa049d4 0x1dfa0f79c 0x1dfa0ee94 0x1dca0a484 0x1dc9e13f0 0x1dfa43a9c 0x1dfa43728 0x1dfa43d44 0x1dcf601cc 0x1dcf6014c 0x1dcf5fa30 0x1dcf5a8fc 0x1dcf5a1cc 0x1df1d1584 0x209fe3328 0x102cebaf0 0x1dca1abb4)</span><br><span class="line"></span><br><span class="line">Thread 0 name:  Dispatch queue: com.apple.main-thread</span><br><span class="line">Thread 0 Crashed:</span><br><span class="line">0   libsystem_kernel.dylib        	0x00000001dcb67104 0x1dcb44000 + 143620</span><br><span class="line">1   libsystem_pthread.dylib       	0x00000001dcbe6998 0x1dcbe0000 + 27032</span><br><span class="line">2   libsystem_c.dylib             	0x00000001dcabed78 0x1dca67000 + 359800</span><br><span class="line">3   libc++abi.dylib               	0x00000001dc188f78 0x1dc187000 + 8056</span><br><span class="line">4   libc++abi.dylib               	0x00000001dc189120 0x1dc187000 + 8480</span><br><span class="line">5   libobjc.A.dylib               	0x00000001dc1a1e48 0x1dc19b000 + 28232</span><br><span class="line">6   libc++abi.dylib               	0x00000001dc1950fc 0x1dc187000 + 57596</span><br><span class="line">7   libc++abi.dylib               	0x00000001dc195188 0x1dc187000 + 57736</span><br><span class="line">8   libdispatch.dylib             	0x00000001dca0a498 0x1dc9a9000 + 398488</span><br><span class="line">9   libdispatch.dylib             	0x00000001dc9e13f0 0x1dc9a9000 + 230384</span><br><span class="line">10  FrontBoardServices            	0x00000001dfa43a9c 0x1df9f8000 + 309916</span><br><span class="line">11  FrontBoardServices            	0x00000001dfa43728 0x1df9f8000 + 309032</span><br><span class="line">12  FrontBoardServices            	0x00000001dfa43d44 0x1df9f8000 + 310596</span><br><span class="line">13  CoreFoundation                	0x00000001dcf601cc 0x1dceb4000 + 704972</span><br><span class="line">14  CoreFoundation                	0x00000001dcf6014c 0x1dceb4000 + 704844</span><br><span class="line">15  CoreFoundation                	0x00000001dcf5fa30 0x1dceb4000 + 703024</span><br><span class="line">16  CoreFoundation                	0x00000001dcf5a8fc 0x1dceb4000 + 682236</span><br><span class="line">17  CoreFoundation                	0x00000001dcf5a1cc 0x1dceb4000 + 680396</span><br><span class="line">18  GraphicsServices              	0x00000001df1d1584 0x1df1c6000 + 46468</span><br><span class="line">19  UIKitCore                     	0x0000000209fe3328 0x2096fc000 + 9335592</span><br><span class="line">20  wspxDemo                      	0x0000000102cebaf0 0x102ce4000 + 31472</span><br><span class="line">21  libdyld.dylib                 	0x00000001dca1abb4 0x1dca1a000 + 2996</span><br><span class="line"></span><br><span class="line">Thread 1:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 0x1dcbe0000 + 60648</span><br><span class="line"></span><br><span class="line">Thread 2:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 0x1dcbe0000 + 60648</span><br><span class="line"></span><br><span class="line">Thread 3:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 0x1dcbe0000 + 60648</span><br><span class="line"></span><br><span class="line">Thread 4:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 0x1dcbe0000 + 60648</span><br><span class="line"></span><br><span class="line">Thread 5 name:  com.apple.uikit.eventfetch-thread</span><br><span class="line">Thread 5:</span><br><span class="line">0   libsystem_kernel.dylib        	0x00000001dcb5bed0 0x1dcb44000 + 98000</span><br><span class="line">1   libsystem_kernel.dylib        	0x00000001dcb5b3a8 0x1dcb44000 + 95144</span><br><span class="line">2   CoreFoundation                	0x00000001dcf5fbc4 0x1dceb4000 + 703428</span><br><span class="line">3   CoreFoundation                	0x00000001dcf5aa60 0x1dceb4000 + 682592</span><br><span class="line">4   CoreFoundation                	0x00000001dcf5a1cc 0x1dceb4000 + 680396</span><br><span class="line">5   Foundation                    	0x00000001dd94f404 0x1dd947000 + 33796</span><br><span class="line">6   Foundation                    	0x00000001dd94f2b0 0x1dd947000 + 33456</span><br><span class="line">7   UIKitCore                     	0x000000020a0d0430 0x2096fc000 + 10306608</span><br><span class="line">8   Foundation                    	0x00000001dda821ac 0x1dd947000 + 1290668</span><br><span class="line">9   libsystem_pthread.dylib       	0x00000001dcbeb2ac 0x1dcbe0000 + 45740</span><br><span class="line">10  libsystem_pthread.dylib       	0x00000001dcbeb20c 0x1dcbe0000 + 45580</span><br><span class="line">11  libsystem_pthread.dylib       	0x00000001dcbeecf4 0x1dcbe0000 + 60660</span><br><span class="line"></span><br><span class="line">Thread 0 crashed with ARM Thread State (64-bit):</span><br><span class="line">    x0: 0x0000000000000000   x1: 0x0000000000000000   x2: 0x0000000000000000   x3: 0x000000028248b4b7</span><br><span class="line">    x4: 0x00000001dc198b81   x5: 0x000000016d11a570   x6: 0x000000000000006e   x7: 0xffffffff00000500</span><br><span class="line">    x8: 0x0000000000000800   x9: 0x00000001dcbe6870  x10: 0x00000001dcbe1ef4  x11: 0x0000000000000003</span><br><span class="line">   x12: 0x0000000000000069  x13: 0x0000000000000000  x14: 0x0000000000000010  x15: 0x0000000000000016</span><br><span class="line">   x16: 0x0000000000000148  x17: 0x0000000000000000  x18: 0x0000000000000000  x19: 0x0000000000000006</span><br><span class="line">   x20: 0x00000001030aeb80  x21: 0x000000016d11a570  x22: 0x0000000000000303  x23: 0x00000001030aec60</span><br><span class="line">   x24: 0x0000000000001903  x25: 0x0000000000002103  x26: 0x0000000000000000  x27: 0x0000000000000000</span><br><span class="line">   x28: 0x00000002836bc408   fp: 0x000000016d11a4d0   lr: 0x00000001dcbe6998</span><br><span class="line">    sp: 0x000000016d11a4a0   pc: 0x00000001dcb67104 cpsr: 0x00000000</span><br><span class="line"></span><br><span class="line">Binary Images:</span><br><span class="line">0x102ce4000 - 0x102ceffff wspxDemo arm64  &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>从<code>Binary Images:0x102ce4000 - 0x102ceffff wspxDemo arm64 &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</code>中我们拿到<code>b0ffd72fc5c33a59bf97c79556430202</code></p>
-</li>
-<li>在终端执行<code>dwarfdump --uuid wspxDemo.app.dSYM/</code>后得到如下的输出:</li>
-</ol>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wspxDemo 2018-11-05 12-56-20 dc$ dwarfdump --uuid wspxDemo.app.dSYM/</span><br><span class="line">UUID: 43C734F8-405F-3970-8B8D-D58575672912 (armv7) wspxDemo.app.dSYM/Contents/Resources/DWARF/wspxDemo</span><br><span class="line">UUID: B0FFD72F-C5C3-3A59-BF97-C79556430202 (arm64) wspxDemo.app.dSYM/Contents/Resources/DWARF/wspxDemo</span><br></pre></td></tr></table></figure>
-</code></pre><ol start="4">
-<li>对比步骤2和3的结果会发现:<code>b0ffd72fc5c33a59bf97c79556430202</code>和<code>B0FFD72F-C5C3-3A59-BF97-C79556430202</code>是一致的，所以该<code>wspxDemo  2018-11-5, 2-42 PM.crash.crash</code>对应的<code>dysm</code>就是<code>wspxDemo.app.dSYM</code></li>
-<li>在终端执行命令：<code>./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash</code>得到如下的输出:</li>
-</ol>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash</span><br><span class="line">Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69.</span><br></pre></td></tr></table></figure>
-</code></pre><ol start="6">
-<li>报错:<code>Error: &quot;DEVELOPER_DIR&quot; is not defined at ./symbolicatecrash line 69.</code></li>
-<li>执行如下命令:<code>export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;</code>然后再执行<code>5</code>的命令.执行结果如下:</li>
-</ol>
-<pre><code>`wspxDemo 2018-11-05 12-56-20 dc$ export DEVELOPER_DIR=&quot;/Applications/XCode.app/Contents/Developer&quot;
-wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-42\ PM.crash wspxDemo.app.dSYM/ &gt; output.crash`
-</code></pre><ol start="8">
-<li>如果没有报任何其他错误，则说明你已经成功把<code>crash</code>符号了，这时打开<code>output.crash</code>开始查看崩溃堆栈吧</li>
-<li><p>如下是符号化后的<code>output.crash</code>文件的内容:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><span class="line">Incident Identifier: 211AB31B-F097-47DC-83ED-3AC6B3AC6B05</span><br><span class="line">CrashReporter Key:   991d9b4c57cf7b9c00c2cabc05f20cb4812ea851</span><br><span class="line">Hardware Model:      iPhone10,3</span><br><span class="line">Process:             wspxDemo [1214]</span><br><span class="line">Path:                /private/var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</span><br><span class="line">Identifier:          com.crash.CrashMe</span><br><span class="line">Version:             2222 (22.22.222)</span><br><span class="line">Code Type:           ARM-64 (Native)</span><br><span class="line">Role:                Foreground</span><br><span class="line">Parent Process:      launchd [1]</span><br><span class="line">Coalition:           com.crash.CrashMe [738]</span><br><span class="line"></span><br><span class="line">Date/Time:           2018-11-05 14:42:17.6018 +0800</span><br><span class="line">Launch Time:         2018-11-05 14:42:17.3303 +0800</span><br><span class="line">OS Version:          iPhone OS 12.1 (16B5089b)</span><br><span class="line">Baseband Version:    3.11.00</span><br><span class="line">Report Version:      104</span><br><span class="line"></span><br><span class="line">Exception Type:  EXC_CRASH (SIGABRT)</span><br><span class="line">Exception Codes: 0x0000000000000000, 0x0000000000000000</span><br><span class="line">Exception Note:  EXC_CORPSE_NOTIFY</span><br><span class="line">Triggered by Thread:  0</span><br><span class="line"></span><br><span class="line">Application Specific Information:</span><br><span class="line">abort() called</span><br><span class="line"></span><br><span class="line">Last Exception Backtrace:</span><br><span class="line">0   CoreFoundation                	0x1dcfcfea0 __exceptionPreprocess + 228</span><br><span class="line">1   libobjc.A.dylib               	0x1dc1a1a40 objc_exception_throw + 55</span><br><span class="line">2   CoreFoundation                	0x1dcede054 -[__NSSingleObjectArrayI objectAtIndex:] + 127</span><br><span class="line">3   wspxDemo                      	0x102ceb9b4 -[AppDelegate application:didFinishLaunchingWithOptions:] + 31156 (AppDelegate.m:150)</span><br><span class="line">4   UIKitCore                     	0x209fda3c8 -[UIApplication _handleDelegateCallbacksWithOptions:isSuspended:restoreState:] + 411</span><br><span class="line">5   UIKitCore                     	0x209fdbb30 -[UIApplication _callInitializationDelegatesForMainScene:transitionContext:] + 3339</span><br><span class="line">6   UIKitCore                     	0x209fe157c -[UIApplication _runWithMainScene:transitionContext:completion:] + 1551</span><br><span class="line">7   UIKitCore                     	0x20987ea18 __111-[__UICanvasLifecycleMonitor_Compatability _scheduleFirstCommitForScene:transition:firstActivation:completion:]_block_invoke + 783</span><br><span class="line">8   UIKitCore                     	0x209887698 +[_UICanvas _enqueuePostSettingUpdateTransactionBlock:] + 159</span><br><span class="line">9   UIKitCore                     	0x20987e694 -[__UICanvasLifecycleMonitor_Compatability _scheduleFirstCommitForScene:transition:firstActivation:completion:] + 239</span><br><span class="line">10  UIKitCore                     	0x20987f034 -[__UICanvasLifecycleMonitor_Compatability activateEventsOnly:withContext:completion:] + 1075</span><br><span class="line">11  UIKitCore                     	0x20987d134 __82-[_UIApplicationCanvas _transitionLifecycleStateWithTransitionContext:completion:]_block_invoke + 771</span><br><span class="line">12  UIKitCore                     	0x20987cde0 -[_UIApplicationCanvas _transitionLifecycleStateWithTransitionContext:completion:] + 431</span><br><span class="line">13  UIKitCore                     	0x209881fa0 __125-[_UICanvasLifecycleSettingsDiffAction performActionsForCanvas:withUpdatedScene:settingsDiff:fromSettings:transitionContext:]_block_invoke + 219</span><br><span class="line">14  UIKitCore                     	0x209882f00 _performActionsWithDelayForTransitionContext + 111</span><br><span class="line">15  UIKitCore                     	0x209881e58 -[_UICanvasLifecycleSettingsDiffAction performActionsForCanvas:withUpdatedScene:settingsDiff:fromSettings:transitionContext:] + 247</span><br><span class="line">16  UIKitCore                     	0x209886d44 -[_UICanvas scene:didUpdateWithDiff:transitionContext:completion:] + 367</span><br><span class="line">17  UIKitCore                     	0x209fdfa74 -[UIApplication workspace:didCreateScene:withTransitionContext:completion:] + 539</span><br><span class="line">18  UIKitCore                     	0x209bca088 -[UIApplicationSceneClientAgent scene:didInitializeWithEvent:completion:] + 363</span><br><span class="line">19  FrontBoardServices            	0x1dfa049d4 -[FBSSceneImpl _didCreateWithTransitionContext:completion:] + 443</span><br><span class="line">20  FrontBoardServices            	0x1dfa0f79c __56-[FBSWorkspace client:handleCreateScene:withCompletion:]_block_invoke_2 + 259</span><br><span class="line">21  FrontBoardServices            	0x1dfa0ee94 __40-[FBSWorkspace _performDelegateCallOut:]_block_invoke + 63</span><br><span class="line">22  libdispatch.dylib             	0x1dca0a484 _dispatch_client_callout + 15</span><br><span class="line">23  libdispatch.dylib             	0x1dc9e13f0 _dispatch_block_invoke_direct$VARIANT$armv81 + 215</span><br><span class="line">24  FrontBoardServices            	0x1dfa43a9c __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 39</span><br><span class="line">25  FrontBoardServices            	0x1dfa43728 -[FBSSerialQueue _performNext] + 415</span><br><span class="line">26  FrontBoardServices            	0x1dfa43d44 -[FBSSerialQueue _performNextFromRunLoopSource] + 55</span><br><span class="line">27  CoreFoundation                	0x1dcf601cc __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 23</span><br><span class="line">28  CoreFoundation                	0x1dcf6014c __CFRunLoopDoSource0 + 87</span><br><span class="line">29  CoreFoundation                	0x1dcf5fa30 __CFRunLoopDoSources0 + 175</span><br><span class="line">30  CoreFoundation                	0x1dcf5a8fc __CFRunLoopRun + 1039</span><br><span class="line">31  CoreFoundation                	0x1dcf5a1cc CFRunLoopRunSpecific + 435</span><br><span class="line">32  GraphicsServices              	0x1df1d1584 GSEventRunModal + 99</span><br><span class="line">33  UIKitCore                     	0x209fe3328 UIApplicationMain + 211</span><br><span class="line">34  wspxDemo                      	0x102cebaf0 main + 31472 (main.m:14)</span><br><span class="line">35  libdyld.dylib                 	0x1dca1abb4 start + 3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Thread 0 name:  Dispatch queue: com.apple.main-thread</span><br><span class="line">Thread 0 Crashed:</span><br><span class="line">0   libsystem_kernel.dylib        	0x00000001dcb67104 __pthread_kill + 8</span><br><span class="line">1   libsystem_pthread.dylib       	0x00000001dcbe6998 pthread_kill$VARIANT$armv81 + 296</span><br><span class="line">2   libsystem_c.dylib             	0x00000001dcabed78 abort + 140</span><br><span class="line">3   libc++abi.dylib               	0x00000001dc188f78 __cxa_bad_cast + 0</span><br><span class="line">4   libc++abi.dylib               	0x00000001dc189120 default_unexpected_handler+ 8480 () + 0</span><br><span class="line">5   libobjc.A.dylib               	0x00000001dc1a1e48 _objc_terminate+ 28232 () + 124</span><br><span class="line">6   libc++abi.dylib               	0x00000001dc1950fc std::__terminate(void (*)+ 57596 ()) + 16</span><br><span class="line">7   libc++abi.dylib               	0x00000001dc195188 std::terminate+ 57736 () + 84</span><br><span class="line">8   libdispatch.dylib             	0x00000001dca0a498 _dispatch_client_callout + 36</span><br><span class="line">9   libdispatch.dylib             	0x00000001dc9e13f0 _dispatch_block_invoke_direct$VARIANT$armv81 + 216</span><br><span class="line">10  FrontBoardServices            	0x00000001dfa43a9c __FBSSERIALQUEUE_IS_CALLING_OUT_TO_A_BLOCK__ + 40</span><br><span class="line">11  FrontBoardServices            	0x00000001dfa43728 -[FBSSerialQueue _performNext] + 416</span><br><span class="line">12  FrontBoardServices            	0x00000001dfa43d44 -[FBSSerialQueue _performNextFromRunLoopSource] + 56</span><br><span class="line">13  CoreFoundation                	0x00000001dcf601cc __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__ + 24</span><br><span class="line">14  CoreFoundation                	0x00000001dcf6014c __CFRunLoopDoSource0 + 88</span><br><span class="line">15  CoreFoundation                	0x00000001dcf5fa30 __CFRunLoopDoSources0 + 176</span><br><span class="line">16  CoreFoundation                	0x00000001dcf5a8fc __CFRunLoopRun + 1040</span><br><span class="line">17  CoreFoundation                	0x00000001dcf5a1cc CFRunLoopRunSpecific + 436</span><br><span class="line">18  GraphicsServices              	0x00000001df1d1584 GSEventRunModal + 100</span><br><span class="line">19  UIKitCore                     	0x0000000209fe3328 UIApplicationMain + 212</span><br><span class="line">20  wspxDemo                      	0x0000000102cebaf0 main + 31472 (main.m:14)</span><br><span class="line">21  libdyld.dylib                 	0x00000001dca1abb4 start + 4</span><br><span class="line"></span><br><span class="line">Thread 1:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 start_wqthread + 0</span><br><span class="line"></span><br><span class="line">Thread 2:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 start_wqthread + 0</span><br><span class="line"></span><br><span class="line">Thread 3:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 start_wqthread + 0</span><br><span class="line"></span><br><span class="line">Thread 4:</span><br><span class="line">0   libsystem_pthread.dylib       	0x00000001dcbeece8 start_wqthread + 0</span><br><span class="line"></span><br><span class="line">Thread 5 name:  com.apple.uikit.eventfetch-thread</span><br><span class="line">Thread 5:</span><br><span class="line">0   libsystem_kernel.dylib        	0x00000001dcb5bed0 mach_msg_trap + 8</span><br><span class="line">1   libsystem_kernel.dylib        	0x00000001dcb5b3a8 mach_msg + 72</span><br><span class="line">2   CoreFoundation                	0x00000001dcf5fbc4 __CFRunLoopServiceMachPort + 236</span><br><span class="line">3   CoreFoundation                	0x00000001dcf5aa60 __CFRunLoopRun + 1396</span><br><span class="line">4   CoreFoundation                	0x00000001dcf5a1cc CFRunLoopRunSpecific + 436</span><br><span class="line">5   Foundation                    	0x00000001dd94f404 -[NSRunLoop+ 33796 (NSRunLoop) runMode:beforeDate:] + 300</span><br><span class="line">6   Foundation                    	0x00000001dd94f2b0 -[NSRunLoop+ 33456 (NSRunLoop) runUntilDate:] + 148</span><br><span class="line">7   UIKitCore                     	0x000000020a0d0430 -[UIEventFetcher threadMain] + 136</span><br><span class="line">8   Foundation                    	0x00000001dda821ac __NSThread__start__ + 1040</span><br><span class="line">9   libsystem_pthread.dylib       	0x00000001dcbeb2ac _pthread_body + 128</span><br><span class="line">10  libsystem_pthread.dylib       	0x00000001dcbeb20c _pthread_start + 48</span><br><span class="line">11  libsystem_pthread.dylib       	0x00000001dcbeecf4 thread_start + 4</span><br><span class="line"></span><br><span class="line">Thread 0 crashed with ARM Thread State (64-bit):</span><br><span class="line">x0: 0x0000000000000000   x1: 0x0000000000000000   x2: 0x0000000000000000   x3: 0x000000028248b4b7</span><br><span class="line">x4: 0x00000001dc198b81   x5: 0x000000016d11a570   x6: 0x000000000000006e   x7: 0xffffffff00000500</span><br><span class="line">x8: 0x0000000000000800   x9: 0x00000001dcbe6870  x10: 0x00000001dcbe1ef4  x11: 0x0000000000000003</span><br><span class="line">x12: 0x0000000000000069  x13: 0x0000000000000000  x14: 0x0000000000000010  x15: 0x0000000000000016</span><br><span class="line">x16: 0x0000000000000148  x17: 0x0000000000000000  x18: 0x0000000000000000  x19: 0x0000000000000006</span><br><span class="line">x20: 0x00000001030aeb80  x21: 0x000000016d11a570  x22: 0x0000000000000303  x23: 0x00000001030aec60</span><br><span class="line">x24: 0x0000000000001903  x25: 0x0000000000002103  x26: 0x0000000000000000  x27: 0x0000000000000000</span><br><span class="line">x28: 0x00000002836bc408   fp: 0x000000016d11a4d0   lr: 0x00000001dcbe6998</span><br><span class="line">sp: 0x000000016d11a4a0   pc: 0x00000001dcb67104 cpsr: 0x00000000</span><br><span class="line"></span><br><span class="line">Binary Images:</span><br><span class="line">0x102ce4000 - 0x102ceffff wspxDemo arm64  &lt;b0ffd72fc5c33a59bf97c79556430202&gt; /var/containers/Bundle/Application/DF7AAB28-9FF0-99EC-4EA1-16B5C50EB87C/wspxDemo.app/wspxDemo</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>从<code>crash</code>文件中我们很容易定位到<code>app</code>挂在了<code>AppDelegate.m</code>文件中的<code>第150行</code>这里.并且可能是因为数组越界导致崩溃。从源码截图中看确实是在<code>AppDelegate.m</code>的<code>150行</code>有问题.</p>
-</li>
-</ol>
+          <pre><code>本文主要分析当iOS APP crash的时候，如何符号化crash日志。
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/11/04/ios开发crash日志符号化/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/vim常用快捷键/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hungry Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hungry Chen‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/04/vim常用快捷键/" itemprop="url">vim常用快捷键</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T12:39:49+08:00">
+                2018-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/command/" itemprop="url" rel="index">
+                    <span itemprop="name">command</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Mac下vim命令的使用"><a href="#Mac下vim命令的使用" class="headerlink" title="Mac下vim命令的使用"></a>Mac下vim命令的使用</h1><pre><code>记录快捷键，方便查询
+</code></pre>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/10/04/vim常用快捷键/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -932,6 +1042,303 @@ wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-4
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/04/平衡符号/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hungry Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hungry Chen‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/04/平衡符号/" itemprop="url">利用栈平衡符号</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-04T12:39:49+08:00">
+                2018-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="栈的应用-平衡符号"><a href="#栈的应用-平衡符号" class="headerlink" title="栈的应用-平衡符号"></a>栈的应用-平衡符号</h1><pre><code>栈（stack）又名堆栈，它是一种运算受限的线性表。
+其限制是仅允许在表的一端进行插入和删除运算，
+这一端被称为栈顶，相对地，把另一端称为栈底。
+</code></pre><hr>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/04/平衡符号/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/04/常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hungry Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hungry Chen‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/04/常用命令/" itemprop="url">常用命令集合</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-04T12:39:49+08:00">
+                2018-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/terminal-command/" itemprop="url" rel="index">
+                    <span itemprop="name">terminal command</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="工作中常用命令行"><a href="#工作中常用命令行" class="headerlink" title="工作中常用命令行"></a>工作中常用命令行</h1><blockquote>
+<p>年纪大了记性不好，随手做个记录。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/02/04/常用命令/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/03/SSL-TLS协议详解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1116,7 +1523,7 @@ wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-4
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1127,7 +1534,7 @@ wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-4
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1138,7 +1545,7 @@ wspxDemo 2018-11-05 12-56-20 dc$ ./symbolicatecrash wspxDemo\ \ 2018-11-5\,\ 2-4
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

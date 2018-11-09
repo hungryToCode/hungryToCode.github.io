@@ -13,6 +13,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[vim常用快捷键]]></title>
+    <url>%2F2018%2F10%2F04%2Fvim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE%2F</url>
+    <content type="text"><![CDATA[Mac下vim命令的使用记录快捷键，方便查询 光标移动1. 移动到行尾&quot;$&quot;，移动到行首&quot;0&quot;(数字)，移动到行首第一个字符处&quot;^&quot; 2. 移动到段首&quot;{&quot;，移动到段尾&quot;}&quot; 3. 移动到下一个词&quot;w&quot;，移动到上一个词&quot;b&quot; 4. 移动到文档开始&quot;gg&quot;，移动到文档结束&quot;G&quot; 5. 跳到第n行&quot;ngg&quot; 或 &quot;nG&quot; 或 &quot;:n&quot; 6. 移动光标到屏幕顶端&quot;H&quot;，移动到屏幕中间&quot;M&quot;，移动到底部&quot;L&quot; 7. 移动到上次编辑文件的位置 &quot;`&quot; 文本编辑1. 光标后插入&quot;a&quot;, 行尾插入&quot;A&quot; 2. 后插一行插入&quot;o&quot;，前插一行插入&quot;O&quot; 3. 删除字符插入&quot;s&quot;， 删除正行插入&quot;S&quot; 4. 光标前插入&quot;i&quot;，行首插入&quot;I&quot; 5. 删除一行&quot;dd&quot;，删除后进入插入模式&quot;cc&quot;或者&quot;S&quot; 6. 删除一个单词&quot;dw&quot;，删除一个单词进入插入模式&quot;cw&quot; 7. 删除一个字符&quot;x&quot;或者&quot;dl&quot;，删除一个字符进入插入模式&quot;s&quot;或者&quot;cl&quot; 8. 粘贴&quot;p&quot;，交换两个字符&quot;xp&quot; 9. 交换两行&quot;ddp&quot; 10. 复制&quot;y&quot;，复制一行&quot;yy&quot; 11. 拷贝当前行 &quot;yy&quot;或者&quot;Y&quot; 12. 撤销&quot;u&quot;，重做&quot;ctrl + r&quot; 13. 删除到行尾可以使用&quot;D&quot;或&quot;C&quot; 14. 删除当前字符 &quot;x&quot; 15. &quot; &gt;&gt;&quot;缩进所有选择的代码 16. &quot;&lt;&lt;&quot; 反缩进所有选择的代码 17. 合并两行&quot; J&quot; 18. 若不想保存文件，而重新打开&quot;:e!&quot; 19. 若想打开新文件 &quot;:e filename&quot;，然后使用&quot;ctrl + ^&quot;进行文件切换 配置设置1. &quot;:set number&quot;显示行号 2. &quot;:set autoindent&quot;自动缩进 3. &quot;:set ignorecase&quot;忽略大小写 4. &quot;:/+字符串&quot;搜索字符串]]></content>
+      <categories>
+        <category>command</category>
+      </categories>
+      <tags>
+        <tag>vim</tag>
+        <tag>tools</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[利用ida定位崩溃问题]]></title>
     <url>%2F2018%2F09%2F13%2F%E5%88%A9%E7%94%A8ida%E5%AE%9A%E4%BD%8Dcrash%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[生活，总是会给你带来意想不到的刺激与惊喜~ 问题描述由于我所在的部门是研发SDK的，所以在提供给CP用的时候，难免会有许多意想不到的问题，其中最头疼的就是应用Crash（崩溃）。可能你们会觉得定位解决崩溃也不难啊，不打个异常断点一下，或者单步调试一下不就定位到了吗？不，CP并不会给你源码，出现崩溃之后，他们查看堆栈是我们的SDK造成的，就直接丢给你如下的堆栈信息，甚至连IPA包都不给你。 堆栈信息截图 问题分析根据问题我们可以得出以下几点有用的信息 通过符号化的第8个堆栈信息可以看出确实是因为我方的SDK而crash（因为该函数调用是我方提供给CP调用的接口） SIGSEGV: SIGSEGV是当一个进程执行了一个无效的内存引用，或发生段错误时会发出的信号。 从上到下总共0到11个堆栈信息（部分截图)，其中对我们分析有用的是0到8，由0可以看出应用是崩在strnlen这个函数。 定位途径 首先想到的肯定是直接在项目中搜索strnlen这个函数，此方法为下下测因为： 项目中的strnlen这个函数可能多处用到，so精准定位难度大。 strnlen函数可能是其他的库函数调用的，比如本例中正是strncpy调用的strnlen，这样你搜索strnlen是定位不到的crash的地方的。 通过符号化的堆栈信息，搜索代码中对应的调用关系。此法比1方法好一点，但还是定位难度大，因为可能由于某种原因堆栈关系并不是下一级内调用上一级的，比如本例，sre_regex_parse并没有调用sslerr_to_curlerr这个函数。 通过未符号化的地址，再利用IDA去逆向砸壳过的项目，便可通过搜索地址，直接精准定位，但此法需要懂汇编与一些其他技能。本文便使用法3定位。 定位步骤 找个越狱机，从appstore上下载对应的应用，并进行砸壳供后续使用。（后续会写一篇砸壳的大致步骤） 使用IDA逆向砸壳后的.decrypted包。 查看未符号化图中的第三条： 1DYZB 0x00000001021626d4 0x0000000100054000 + 34662100 其中34662100为改函数在内存中的偏移地址，把他转为16进制为0x210E6D4。 接着因为IDA软件本身有一个初始的偏移地址，查看方法为： IDA——Edit——segments——rebase program——value 两个地址相加： 0x210E6D4 + 0x100000000 = 0x10210E6D4 在IDA中按下地址跳转键“g”，输入上述地址跳转到0x10210E6D4，图为： 其中框1为崩溃地址，可以看出为调用了strncpy之后崩溃。 搜索框2中的特殊字符串，定位到代码大概位置。 再搜索框3，4的函数。 再看三条红实心框的跳转，其中框6中： w21 #0 与框框5中： ADD w21，w21，#1 CMP w20，w21 B.NE loc_1021E694 可翻译为：申请一个变量为0，接着执行一段代码，接着使其加1，并与w20中的值比较，然后跳转。这正是一个for循环。 综上，crash位置如图： 崩溃原因]]></content>
@@ -46,6 +58,29 @@
       <tags>
         <tag>hexo主题</tag>
         <tag>next</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[利用栈平衡符号]]></title>
+    <url>%2F2018%2F08%2F04%2F%E5%B9%B3%E8%A1%A1%E7%AC%A6%E5%8F%B7%2F</url>
+    <content type="text"><![CDATA[栈的应用-平衡符号栈（stack）又名堆栈，它是一种运算受限的线性表。 其限制是仅允许在表的一端进行插入和删除运算， 这一端被称为栈顶，相对地，把另一端称为栈底。 平衡符号化解释 编译器检查你的程序的语法错误，但是常常由于少一个符号（如遗漏一个花括号或是注释起始符）引起编译器列出上百行的诊断，而真正的错误并没有找出。在这种情况下一个有用的程序就是检验是否每件事情都能成对出现。于是，每一个右花括号、右方括号及右圆括号必然对应其相应的左括号。序列[()]是合法的，但[(])是错误的。 编程实现123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;typedef struct Mystack *Stack;struct Mystack &#123; int Capacity; /* 栈的容量 */ int Top_of_stack; /* 栈顶下标 */ char *Array; /* 存放栈中元素的数组 */&#125;;/* 栈的创建 */static Stack CreateStack(int Max)&#123; Stack S; S = malloc(sizeof(struct Mystack)); if (S == NULL) printf(&quot;Create stack error!\n&quot;); S-&gt;Array = malloc(sizeof(char) * Max); if (S-&gt;Array == NULL) printf(&quot;Create stack array error!\n&quot;); S-&gt;Capacity = Max; S-&gt;Top_of_stack = 0; return S;&#125;/* 释放栈 */static void DisposeStack(Stack S)&#123; if (S != NULL) &#123; free(S-&gt;Array); free(S); &#125;&#125;/* 判断一个栈是否是空栈 */static int IsEmptyStack(Stack S)&#123; return !S-&gt;Top_of_stack;&#125;/* 判断一个栈是否满栈 */static int IsFullStack(Stack S)&#123;// if (S-&gt;Top_of_stack == S-&gt;Capacity - 1) &#123;// return 1;// &#125;// return 0; return S-&gt;Top_of_stack == S-&gt;Capacity - 1;&#125;/* 数据入栈 */static int PushStack(int x, Stack S)&#123; if (!IsFullStack(S)) &#123; S-&gt;Array[S-&gt;Top_of_stack++] = x; return 0; &#125; printf(&quot;The stack is full!&quot;); return -1;&#125;/* 数据出栈 */static int PopStack(Stack S)&#123; if (!IsEmptyStack(S)) &#123; S-&gt;Top_of_stack--; return 0; &#125; printf(&quot;The Stack is empty!\n&quot;); return -1;&#125;/* 将栈顶返回 */static char TopOfStack(Stack S)&#123; if (!IsEmptyStack(S)) return S-&gt;Array[S-&gt;Top_of_stack - 1]; printf(&quot;The Stack is empty!\n&quot;); return 0;&#125;int main (int argc, const char * argv[])&#123; int i, len; char str[100]; printf(&quot;Please input the symbol that you want to balance: \n&quot;); scanf(&quot;%s&quot;, str); len = (int)strlen(str); /* 根据序列的长度来创建栈 */ struct Mystack *my_stack = CreateStack(len+1); for (i = 0; i &lt; len; i++) &#123; if (str[i] == &apos;&#123;&apos; || str[i] == &apos;[&apos; || str[i] == &apos;(&apos; ) &#123; if (PushStack(str[i], my_stack) != 0) &#123; printf(&quot;Push %d error!&quot;,str[i]); &#125; &#125; if (str[i] == &apos;&#125;&apos;) &#123; if (TopOfStack(my_stack) == &apos;&#123;&apos;) PopStack(my_stack); else break; &#125; else if (str[i] == &apos;]&apos;) &#123; if (TopOfStack(my_stack) == &apos;[&apos;) PopStack(my_stack); else break; &#125; else if (str[i] == &apos;)&apos;) &#123; if (TopOfStack(my_stack) == &apos;(&apos;) PopStack(my_stack); else break; &#125; &#125; /* 如果最后占空则序列是合法的 */ if(IsEmptyStack(my_stack)) printf(&quot;The symbol that you input is balance!\n&quot;); else printf(&quot;The symbol that you input is imbalance!\n&quot;); DisposeStack(my_stack); return 0;&#125; 测试结果]]></content>
+      <categories>
+        <category>数据结构</category>
+      </categories>
+      <tags>
+        <tag>栈</tag>
+        <tag>平衡符号</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[常用命令集合]]></title>
+    <url>%2F2018%2F02%2F04%2F%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[工作中常用命令行 年纪大了记性不好，随手做个记录。 openssl相关 把.cer二进制证书转换成.crt证书 openssl x509 -inform der -in GlobalSign_Root_CA.cer -out GlobalSign.crt 验证user_cert是否是根证书root_cert签名的 openssl verify -CAfile ROOT_CERT USER_CERT 把.crt与.cer合并成.der格式证书 openssl x509 -in 你的证书.crt -out 你的证书.cer -outform der 查看某个域名的证书情况 openssl s_client -showcerts -verify 5 -connect www.baidu.com:443 nginx相关 查看nginx进程 ps -ef|grep nginx 开启nginx sudo nginx 关闭nginx sudo nginx -s stop 重载nginx sudo nginx -s reload nginx配置文件路径 /usr/local/etc/nginx/nginx.cnf iOS tools dumpdecrypted.dylib 1，将dumpdecrypted.dylib拷贝到手机的(iOS8)： /var/mobile/Containers/Data/Application/xxx-xxx/Documents， 在iOS7中是： /var/mobile/Applications/xxx-xxx/Documents 2，iOS8然后再cd到3中的目录下执行: DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib /var/mobile/Containers/Bundle/Application/xxx-xxx/yyy.app/yyy iOS7然后再cd到3中的目录下执行: DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib /var/mobile/Applications/xxx-xxx/yyy.app/yyy 3，然后就会生成： yyy.decrypted ssh（默认密码alpine） ssh root@ip -p 2222 scp拷贝 scp -P&lt;port&gt; root@&lt;remoteIpAddress&gt;:&lt;remote dir path&gt; &lt;source file path&gt; tcpdump抓手机lo的包 tcpdump -i lo0 -s0 -w xxxx.pcapng class dump ./class-dump -H xx.app -o outputs 查看xcode版本 xcode-select -p 选择xcode版本 sudo xcode-select -s + xcode地址 iproxy iproxy 本机端口 手机端口 其他 检查某个端口服务是否开启 telnet ip port 查看占用9000端口的进程 sudo lsof -i :9000 杀死pid为1000的进程 sudo kill -9 1000]]></content>
+      <categories>
+        <category>terminal command</category>
+      </categories>
+      <tags>
+        <tag>Mac terminal command</tag>
       </tags>
   </entry>
   <entry>
