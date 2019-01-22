@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="OC,tools," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="Know,but say no strategically will help you grow up!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hungry Chen‘s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/landscape/index.html">
+<meta name="description" content="收集一些在日常iOS开发中经常用到的工具类代码，方便重复使用，提高开发效率。">
+<meta name="keywords" content="OC,tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS工具类代码">
+<meta property="og:url" content="http://yoursite.com/2019/01/22/iOS工具类代码/index.html">
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
-<meta property="og:description" content="Know,but say no strategically will help you grow up!">
+<meta property="og:description" content="收集一些在日常iOS开发中经常用到的工具类代码，方便重复使用，提高开发效率。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-22T14:21:36.771Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hungry Chen‘s Blog">
-<meta name="twitter:description" content="Know,but say no strategically will help you grow up!">
+<meta name="twitter:title" content="iOS工具类代码">
+<meta name="twitter:description" content="收集一些在日常iOS开发中经常用到的工具类代码，方便重复使用，提高开发效率。">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/landscape/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/01/22/iOS工具类代码/"/>
 
 
 
 
 
-  <title>标签: landscape | Hungry Chen‘s Blog</title>
+  <title>iOS工具类代码 | Hungry Chen‘s Blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,54 +283,211 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>landscape<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/iOS工具类代码/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hungry Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hungry Chen‘s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/09/10/the-description-of-themes-landscape/" itemprop="url">
-              
-                <span itemprop="name">the description of themes landscape</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">iOS工具类代码</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-10T23:14:27+08:00"
-              content="2018-09-10" >
-          09-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-22T21:56:39+08:00">
+                2019-01-22
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS工具类代码/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS工具类代码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <pre><code>收集一些在日常iOS开发中经常用到的工具类代码，方便重复使用，提高开发效率。
+</code></pre><a id="more"></a>
+<h2 id="url转码"><a href="#url转码" class="headerlink" title="url转码"></a>url转码</h2><pre><code>可以写成NSString的分类，方便使用
+</code></pre><ul>
+<li><p>URL编码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)URLEncodedString</span><br><span class="line">&#123;</span><br><span class="line">  // CharactersToBeEscaped = @&quot;:/?&amp;=;+!@#$()~&apos;,*&quot;;</span><br><span class="line">  // CharactersToLeaveUnescaped = @&quot;[].&quot;;</span><br><span class="line"></span><br><span class="line">  NSString *unencodedString = self;</span><br><span class="line">  NSString *encodedString = (NSString *)</span><br><span class="line">  CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,</span><br><span class="line">                                                            (CFStringRef)unencodedString,</span><br><span class="line">                                                            NULL,</span><br><span class="line">                                                            (CFStringRef)@&quot;!*&apos;();:@&amp;=+$,/?%#[]&quot;,</span><br><span class="line">                                                            kCFStringEncodingUTF8));</span><br><span class="line"></span><br><span class="line">  return encodedString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>URL解码</p>
+<pre><code>解码的时候，因为在iOS系统上，&quot; &quot;字符，也就是空格，编码的时候是编码为&quot;%20&quot;，而在其他系统比如安卓，windows上是编码为&quot;+&quot;,所以如果直接解码的话，&quot;+&quot;并不会被正确解码成&quot; &quot;空格字符，所以需要把&quot;+&quot;全都替换成&quot; &quot;空格再进行解码。
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (NSString *)URLDecodedString</span><br><span class="line">&#123;</span><br><span class="line">  NSString *result = [(NSString *)self stringByReplacingOccurrencesOfString:@&quot;+&quot; withString:@&quot; &quot;];</span><br><span class="line">  return [result stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>Donate comment here</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Hungry Chen 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Hungry Chen 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OC/" rel="tag"># OC</a>
+          
+            <a href="/tags/tools/" rel="tag"># tools</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/13/常见排序算法/" rel="next" title="常见排序算法">
+                <i class="fa fa-chevron-left"></i> 常见排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -336,6 +495,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -356,8 +519,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -437,6 +609,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#url转码"><span class="nav-number">1.</span> <span class="nav-text">url转码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -573,6 +761,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
