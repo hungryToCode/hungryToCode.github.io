@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。   区别在最简单的情况下，帧缓冲区只有一个，这时帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，显示系统通常会引入两个缓冲区，">
+<meta name="description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。">
 <meta name="keywords" content="iOS离屏渲染">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS离屏渲染与解决方案">
 <meta property="og:url" content="http://yoursite.com/2019/01/27/iOS离屏渲染与解决方案/index.html">
 <meta property="og:site_name" content="Hungry Chen‘s Blog">
-<meta property="og:description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。   区别在最简单的情况下，帧缓冲区只有一个，这时帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，显示系统通常会引入两个缓冲区，">
+<meta property="og:description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/iOS离屏渲染与解决方案/1.jpg">
-<meta property="og:updated_time" content="2019-02-18T13:05:37.055Z">
+<meta property="og:image" content="http://yoursite.com/images/iOS离屏渲染与解决方案/1.png">
+<meta property="og:updated_time" content="2019-03-27T12:25:54.385Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS离屏渲染与解决方案">
-<meta name="twitter:description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。   区别在最简单的情况下，帧缓冲区只有一个，这时帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，显示系统通常会引入两个缓冲区，">
-<meta name="twitter:image" content="http://yoursite.com/images/iOS离屏渲染与解决方案/1.jpg">
+<meta name="twitter:description" content="屏幕渲染 渲染方式 On-Screen Rendering (当前屏幕渲染) 指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。  Off-Screen Rendering (离屏渲染) 指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。">
+<meta name="twitter:image" content="http://yoursite.com/images/iOS离屏渲染与解决方案/1.png">
 
 
 
@@ -388,7 +388,7 @@
       
 
       
-        <h2 id="屏幕渲染"><a href="#屏幕渲染" class="headerlink" title="屏幕渲染"></a>屏幕渲染</h2><p><img src="/images/iOS离屏渲染与解决方案/1.jpg" alt="UIKit框架" title="UIKit框架"></p>
+        <h2 id="屏幕渲染"><a href="#屏幕渲染" class="headerlink" title="屏幕渲染"></a>屏幕渲染</h2><p><img src="/images/iOS离屏渲染与解决方案/1.png" alt="UIKit框架" title="UIKit框架"></p>
 <h3 id="渲染方式"><a href="#渲染方式" class="headerlink" title="渲染方式"></a>渲染方式</h3><ul>
 <li><p>On-Screen Rendering (当前屏幕渲染)</p>
 <p>指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。</p>
@@ -397,6 +397,7 @@
 <p>指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。</p>
 </li>
 </ul>
+<a id="more"></a>
 <h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>在最简单的情况下，帧缓冲区只有一个，这时帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，显示系统通常会引入两个缓冲区，即双缓冲机制。在这种情况下，GPU 会预先渲染好一帧放入一个缓冲区内，让视频控制器读取，当下一帧渲染好后，GPU 会直接把视频控制器的指针指向第二个缓冲器。如此一来效率会有很大的提升。</p>
 <h3 id="离屏渲染为什么会损耗性能"><a href="#离屏渲染为什么会损耗性能" class="headerlink" title="离屏渲染为什么会损耗性能"></a>离屏渲染为什么会损耗性能</h3><p>之所以离屏渲染性能低的原因在于<code>创建新的缓冲区</code>与<code>上下文切换</code>，其中<code>上下文切换</code>是最主要的原因。</p>
 <p>所谓的上下文切换就是：</p>

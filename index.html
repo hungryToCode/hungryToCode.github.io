@@ -388,8 +388,7 @@
 
       
         
-          
-            <h2 id="屏幕渲染"><a href="#屏幕渲染" class="headerlink" title="屏幕渲染"></a>屏幕渲染</h2><p><img src="/images/iOS离屏渲染与解决方案/1.jpg" alt="UIKit框架" title="UIKit框架"></p>
+          <h2 id="屏幕渲染"><a href="#屏幕渲染" class="headerlink" title="屏幕渲染"></a>屏幕渲染</h2><p><img src="/images/iOS离屏渲染与解决方案/1.png" alt="UIKit框架" title="UIKit框架"></p>
 <h3 id="渲染方式"><a href="#渲染方式" class="headerlink" title="渲染方式"></a>渲染方式</h3><ul>
 <li><p>On-Screen Rendering (当前屏幕渲染)</p>
 <p>指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区进行。</p>
@@ -398,43 +397,13 @@
 <p>指的是在GPU在当前屏幕缓冲区以外开辟一个缓冲区进行渲染操作。</p>
 </li>
 </ul>
-<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>在最简单的情况下，帧缓冲区只有一个，这时帧缓冲区的读取和刷新都都会有比较大的效率问题。为了解决效率问题，显示系统通常会引入两个缓冲区，即双缓冲机制。在这种情况下，GPU 会预先渲染好一帧放入一个缓冲区内，让视频控制器读取，当下一帧渲染好后，GPU 会直接把视频控制器的指针指向第二个缓冲器。如此一来效率会有很大的提升。</p>
-<h3 id="离屏渲染为什么会损耗性能"><a href="#离屏渲染为什么会损耗性能" class="headerlink" title="离屏渲染为什么会损耗性能"></a>离屏渲染为什么会损耗性能</h3><p>之所以离屏渲染性能低的原因在于<code>创建新的缓冲区</code>与<code>上下文切换</code>，其中<code>上下文切换</code>是最主要的原因。</p>
-<p>所谓的上下文切换就是：</p>
-<p>首先我要保存当前屏幕渲染环境，然后切换到一个新的绘制环境，申请绘制资源，初始化环境，然后开始一个绘制，绘制完毕后销毁这个绘制环境，如需要切换到On-Screen Rendering或者再开始一个新的离屏渲染重复之前的操作，这个过程是相当耗时的。</p>
-<h3 id="会触发离屏幕渲染的操作"><a href="#会触发离屏幕渲染的操作" class="headerlink" title="会触发离屏幕渲染的操作"></a>会触发离屏幕渲染的操作</h3><ul>
-<li><p>为图层设置遮罩（layer.mask）</p>
-</li>
-<li><p>将图层的layer.masksToBounds / view.clipsToBounds属性设置为YES</p>
-</li>
-<li><p>将图层layer.allowsGroupOpacity属性设置为YES和layer.opacity小于1.0</p>
-</li>
-<li><p>为图层设置阴影（layer.shadow…）</p>
-</li>
-<li><p>为图层通过cornerRadius设置圆角并且设置maskToBounds为YES</p>
-</li>
-<li><p>重写UIView的drawRect方法 (CPU渲染)</p>
-</li>
-<li><p>为图层设置layer.shouldRasterize=YES</p>
-</li>
-</ul>
-<h2 id="针对离屏渲染的性能优化"><a href="#针对离屏渲染的性能优化" class="headerlink" title="针对离屏渲染的性能优化"></a>针对离屏渲染的性能优化</h2><h3 id="圆角优化"><a href="#圆角优化" class="headerlink" title="圆角优化"></a>圆角优化</h3><p>我们设置圆角一般通过如下方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imageView.layer.cornerRadius = CGFloat(10);</span><br><span class="line">imageView.layer.masksToBounds = YES;</span><br></pre></td></tr></table></figure>
-<p>因为<code>cornerRadius</code>属性只会影响到layer的backgroundColor与border，但这时当layer的contents为一张背景颜色不为透明的图时，此时contents并不会有圆角效果，所以才需要<code>imageView.layer.masksToBounds = YES</code>这一句，这也是触发离屏渲染的真正原因。</p>
-<p>解决方案：</p>
-<ul>
-<li><p>如果不需要对外部来源的图片做圆角，由设计师直接画成圆角图片是最方便的。</p>
-</li>
-<li><p>通过UIBezierPath在后台线程绘制圆角image。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (void)setCircleImage &#123;    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">        UIImage * circleImage = [image imageWithCircle];</span><br><span class="line">        dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">            imageView.image = circleImage;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#import &quot;UIImage+Addtions.h&quot;</span><br><span class="line">@implementation UIImage (Addtions)</span><br><span class="line">//返回一张圆形图片</span><br><span class="line">- (instancetype)imageWithCircle &#123;</span><br><span class="line">    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);</span><br><span class="line">    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, self.size.width, self.size.height)];</span><br><span class="line">    [path addClip];</span><br><span class="line">    [self drawAtPoint:CGPointZero];</span><br><span class="line">    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();</span><br><span class="line">    UIGraphicsEndImageContext();</span><br><span class="line">    return image;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="shadow优化"><a href="#shadow优化" class="headerlink" title="shadow优化"></a>shadow优化</h3><p>设定shadowPath避免触发离屏渲染</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_myView.layer.backgroundColor = [UIColor greenColor].CGColor;</span><br><span class="line">_myView.layer.shadowColor = [UIColor blackColor].CGColor;</span><br><span class="line">_myView.layer.shadowOpacity = 0.5;</span><br><span class="line">_myView.layer.shadowOffset = CGSizeMake(10, 10);</span><br><span class="line">_myView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_myView.bounds].CGPath;</span><br></pre></td></tr></table></figure>
-<h3 id="shouldRasterize光栅化"><a href="#shouldRasterize光栅化" class="headerlink" title="shouldRasterize光栅化"></a>shouldRasterize光栅化</h3><p>如果<code>shouldRasterize = YES</code>的话，相当于手动开启了离屏渲染。</p>
-<p>开启shouldRasterize之后，GPU只合成一次内容，然后复用合成的结果，并且合成的内容超过100ms没有使用会从缓存里面移除。但是如果界面中的控件是动态变化的，比如UITableView，会导致产生更多的离屏渲染，让性能变得更糟糕，所以光栅化适合于静态不变的内容。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/27/iOS离屏渲染与解决方案/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
